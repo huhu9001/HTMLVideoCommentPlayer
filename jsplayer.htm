@@ -1,0 +1,338 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>HTML视频评论播放器</title>
+<!--  ■jsplayer http://wp.me/ppmtz-1Cu  -->
+<style>
+.jsplayer{
+    visibility: hidden;
+}
+
+.jsplayer-video{
+    position: absolute;
+}
+
+.jsplayer-screen{
+    background-color: #000;
+    width: 640px;
+    height: 360px;
+    overflow: hidden;
+    white-space : nowrap;
+    cursor: default;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    position: relative;
+}
+
+.jsplayer-screen:focus{
+    outline: none;
+}
+
+.jsplayer-screen-osd{
+    font-family: Arial, sans-serif;
+    position: absolute;
+    right: 2%;
+    top: 5%;
+    background-color: #000;
+    color:#0f0;
+    z-index: 3;
+}
+
+.jsplayer-screen:-ms-fullscreen{
+    position: absolute;
+    width: 100% !important;
+    height: 100% !important;
+	left: 0;
+ 	top: 0;
+}
+
+.jsplayer-screen:-webkit-full-screen{
+    position: absolute;
+    width: 100% !important;
+    height: 100% !important;
+	left: 0;
+ 	top: 0;
+}
+
+.jsplayer-screen:-moz-full-screen{
+    position: absolute;
+    width: 100% !important;
+    height: 100% !important;
+	left: 0;
+ 	top: 0;
+}
+
+.jsplayer-screen:fullscreen{
+    position: absolute;
+    width: 100% !important;
+    height: 100% !important;
+	left: 0;
+ 	top: 0;
+}
+
+.jsplayer-controller{
+    display: block;
+    width: 640px;
+    height: 55px;
+    line-height: 1;
+    color: white;
+    text-decoration: none;
+    background: #47494f;
+    border-color: #2f3034 #2f3034 #232427;
+    background-image: linear-gradient(to bottom, #555, #333 66%, #000);
+    cursor: default;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    position:relative;
+    visibility:visible;
+}
+
+.jsplayer-controller-wrap{
+    padding: 0 6px;
+    position:absolute;
+    top: 5px;
+}
+
+.jsplayer-controller-current-time,
+.jsplayer-controller-total-time{
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    vertical-align: 6px;
+    padding: 0;
+    display: inline-block;
+    width: 35px;
+}
+
+.jsplayer-controller-current-time{
+    text-align: right;
+}
+
+.jsplayer-controller-total-time{
+    text-align: left;
+}
+
+.jsplayer-controller-play-button,
+.jsplayer-controller-volume-button,
+.jsplayer-controller-comment-button,
+.jsplayer-controller-screen-button{
+    margin: 0 3px;
+    padding: 0;
+    border: none;
+	cursor: pointer;
+}
+
+.jsplayer-controller-time-seek,
+.jsplayer-controller-volume-seek{
+    display: inline-block;
+    margin: 0 5px;
+    padding: 0;
+    height: 20px;
+}
+
+.jsplayer-controller-time-seek{
+    width: 333px;
+}
+
+.jsplayer-controller-volume-seek{
+    width: 100px;
+}
+
+.jsplayer-controller-time-seekbar,
+.jsplayer-controller-volume-seekbar{
+    position: relative;
+    height: 5px;
+    margin: 0 0 8px 0;
+    padding: 0;
+    background-color: #fff;
+    border-radius: 2px;
+    width: 100%;
+    top: 7px;
+}
+
+.jsplayer-controller-time-seekbar{
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAICAIAAABcT7kVAAAAFUlEQVQI12N0WX+DgYGBiYGBgSQKAGI2AdswIf1pAAAAAElFTkSuQmCC");
+    background-repeat: no-repeat;
+    background-position: 0;
+    background-size : 0;
+}
+
+.jsplayer-controller-time-seeker,
+.jsplayer-controller-volume-seeker{
+    position: absolute;
+	cursor: pointer;
+	width: 10px;
+	height: 18px;
+	background-color: #ccc;
+    top: -7px;
+    left: 0px;
+    background-image: linear-gradient(to bottom, #ccc, #aaa);
+    border: solid 1px #999;
+    border-radius: 3px;
+    display: inline;
+}
+
+.jsplayer-form{
+    width: 100%;
+    position: absolute;
+    top:29px;
+}
+
+.jsplayer-form-input{
+    width: 80%;
+    height: 26px;
+    box-shadow: 3px 3px 3px rgba(200,200,200,0.2) inset;
+    border: 1px solid #888888;
+    border-radius: 0;
+    padding:4px 6px 3px 12px;
+    vertical-align:middle;
+    ime-mode: active;
+    box-sizing: border-box;
+}
+
+.jsplayer-form-button{
+    width: 20%;
+    height: 26px;
+    text-decoration: none;
+    text-align: center;
+    padding: 3px 15px 3px 15px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #5ba825;
+    background: linear-gradient(to bottom, #84be5c 0%, #84be5c 50%, #5ba825 50%, #5ba825 100%);
+    border: 1px solid #377d00;
+    border-radius: 0;
+    line-height: 1;
+    vertical-align: middle;
+    font-family: 'MS PGothic', Meiryo, sans-serif;
+	cursor: pointer;
+    box-sizing: border-box;
+}
+
+.jsplayer-commentnaka{
+    font-family: 'MS PGothic', Meiryo, sans-serif;
+    position: absolute;
+    left: 100%;
+    line-height: 1;
+    z-index: 2;
+    color: #fff;
+    text-shadow: -1px -1px #333, 1px -1px #333,	-1px 1px #333, 1px 1px #333;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+    animation-duration: 17s;
+    opacity: 0.9;
+}
+
+.jsplayer-commentue{
+    font-family: 'MS PGothic', Meiryo, sans-serif;
+    position: absolute;
+    left: 100%;
+    line-height: 1;
+    z-index: 2;
+    color: #fff;
+    text-shadow: -1px -1px #333, 1px -1px #333,	-1px 1px #333, 1px 1px #333;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+    animation-duration: 17s;
+    opacity: 0.9;
+}
+
+.jsplayer-commentshita{
+    font-family: 'MS PGothic', Meiryo, sans-serif;
+    position: absolute;
+    left: 100%;
+    line-height: 1;
+    z-index: 2;
+    color: #fff;
+    text-shadow: -1px -1px #333, 1px -1px #333,	-1px 1px #333, 1px 1px #333;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+    animation-duration: 17s;
+    opacity: 0.9;
+}
+</style>
+</head>
+<body>
+
+
+
+
+    <div class="jsplayer" id="jsplayer">
+        <div class="jsplayer-screen" tabindex="1">
+            <video class="jsplayer-video">ERROR: Html player not supported.</video>
+        </div><div class="jsplayer-controller">
+            <div class="jsplayer-controller-wrap">
+                <img class="jsplayer-controller-play-button" width="20" height="20" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTc5MiIgaGVpZ2h0PSIxNzkyIiB2aWV3Qm94PSIwIDAgMTc5MiAxNzkyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0xNTc2IDkyN2wtMTMyOCA3MzhxLTIzIDEzLTM5LjUgM3QtMTYuNS0zNnYtMTQ3MnEwLTI2IDE2LjUtMzZ0MzkuNSAzbDEzMjggNzM4cTIzIDEzIDIzIDMxdC0yMyAzMXoiIGZpbGw9IiNmZmYiLz48L3N2Zz4="><span class="jsplayer-controller-current-time">00:00</span><div class="jsplayer-controller-time-seek">
+                    <div class="jsplayer-controller-time-seekbar">
+                        <span class="jsplayer-controller-time-seeker"></span>
+                    </div>
+                </div><span class="jsplayer-controller-total-time">00:00</span><img class="jsplayer-controller-volume-button" width="20" height="20" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTc5MiIgaGVpZ2h0PSIxNzkyIiB2aWV3Qm94PSIwIDAgMTc5MiAxNzkyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik04MzIgMzUydjEwODhxMCAyNi0xOSA0NXQtNDUgMTktNDUtMTlsLTMzMy0zMzNoLTI2MnEtMjYgMC00NS0xOXQtMTktNDV2LTM4NHEwLTI2IDE5LTQ1dDQ1LTE5aDI2MmwzMzMtMzMzcTE5LTE5IDQ1LTE5dDQ1IDE5IDE5IDQ1em0zODQgNTQ0cTAgNzYtNDIuNSAxNDEuNXQtMTEyLjUgOTMuNXEtMTAgNS0yNSA1LTI2IDAtNDUtMTguNXQtMTktNDUuNXEwLTIxIDEyLTM1LjV0MjktMjUgMzQtMjMgMjktMzUuNSAxMi01Ny0xMi01Ny0yOS0zNS41LTM0LTIzLTI5LTI1LTEyLTM1LjVxMC0yNyAxOS00NS41dDQ1LTE4LjVxMTUgMCAyNSA1IDcwIDI3IDExMi41IDkzdDQyLjUgMTQyem0yNTYgMHEwIDE1My04NSAyODIuNXQtMjI1IDE4OC41cS0xMyA1LTI1IDUtMjcgMC00Ni0xOXQtMTktNDVxMC0zOSAzOS01OSA1Ni0yOSA3Ni00NCA3NC01NCAxMTUuNS0xMzUuNXQ0MS41LTE3My41LTQxLjUtMTczLjUtMTE1LjUtMTM1LjVxLTIwLTE1LTc2LTQ0LTM5LTIwLTM5LTU5IDAtMjYgMTktNDV0NDUtMTlxMTMgMCAyNiA1IDE0MCA1OSAyMjUgMTg4LjV0ODUgMjgyLjV6bTI1NiAwcTAgMjMwLTEyNyA0MjIuNXQtMzM4IDI4My41cS0xMyA1LTI2IDUtMjYgMC00NS0xOXQtMTktNDVxMC0zNiAzOS01OSA3LTQgMjIuNS0xMC41dDIyLjUtMTAuNXE0Ni0yNSA4Mi01MSAxMjMtOTEgMTkyLTIyN3Q2OS0yODktNjktMjg5LTE5Mi0yMjdxLTM2LTI2LTgyLTUxLTctNC0yMi41LTEwLjV0LTIyLjUtMTAuNXEtMzktMjMtMzktNTkgMC0yNiAxOS00NXQ0NS0xOXExMyAwIDI2IDUgMjExIDkxIDMzOCAyODMuNXQxMjcgNDIyLjV6IiBmaWxsPSIjZmZmIi8+PC9zdmc+"><div class="jsplayer-controller-volume-seek">
+                    <div class="jsplayer-controller-volume-seekbar">
+                        <span class="jsplayer-controller-volume-seeker"></span>
+                    </div>
+                </div><img class="jsplayer-controller-comment-button" width="20" height="20" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTc5MiIgaGVpZ2h0PSIxNzkyIiB2aWV3Qm94PSIwIDAgMTc5MiAxNzkyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Im02NDAsNzkycTAsLTUzIC0zNy41LC05MC41dC05MC41LC0zNy41dC05MC41LDM3LjV0LTM3LjUsOTAuNXQzNy41LDkwLjV0OTAuNSwzNy41dDkwLjUsLTM3LjV0MzcuNSwtOTAuNXptMzg0LDBxMCwtNTMgLTM3LjUsLTkwLjV0LTkwLjUsLTM3LjV0LTkwLjUsMzcuNXQtMzcuNSw5MC41dDM3LjUsOTAuNXQ5MC41LDM3LjV0OTAuNSwtMzcuNXQzNy41LC05MC41em0zODQsMHEwLC01MyAtMzcuNSwtOTAuNXQtOTAuNSwtMzcuNXQtOTAuNSwzNy41dC0zNy41LDkwLjV0MzcuNSw5MC41dDkwLjUsMzcuNXQ5MC41LC0zNy41dDM3LjUsLTkwLjV6bTM4NCwwcTAsMTc0IC0xMjAsMzIxLjV0LTMyNiwyMzN0LTQ1MCw4NS41cS0xMTAsMCAtMjExLC0xOHEtMTczLDE3MyAtNDM1LDIyOXEtNTIsMTAgLTg2LDEzcS0xMiwxIC0yMiwtNnQtMTMsLTE4cS00LC0xNSAyMCwtMzdxNSwtNSAyMy41LC0yMS41dDI1LjUsLTIzLjV0MjMuNSwtMjUuNXQyNCwtMzEuNXQyMC41LC0zN3QyMCwtNDh0MTQuNSwtNTcuNXQxMi41LC03Mi41cS0xNDYsLTkwIC0yMjkuNSwtMjE2LjV0LTgzLjUsLTI2OS41cTAsLTE3NCAxMjAsLTMyMS41dDMyNiwtMjMzLjAwMDA3NnQ0NTAsLTg1LjUwMDMydDQ1MCw4NS41MDAzMnQzMjYsMjMzLjAwMDA3NnQxMjAsMzIxLjV6IiBmaWxsPSIjZmZmIi8+PC9zdmc+"><img class="jsplayer-controller-screen-button" width="20" height="20" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTc5MiIgaGVpZ2h0PSIxNzkyIiB2aWV3Qm94PSIwIDAgMTc5MiAxNzkyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik04ODMgMTA1NnEwIDEzLTEwIDIzbC0zMzIgMzMyIDE0NCAxNDRxMTkgMTkgMTkgNDV0LTE5IDQ1LTQ1IDE5aC00NDhxLTI2IDAtNDUtMTl0LTE5LTQ1di00NDhxMC0yNiAxOS00NXQ0NS0xOSA0NSAxOWwxNDQgMTQ0IDMzMi0zMzJxMTAtMTAgMjMtMTB0MjMgMTBsMTE0IDExNHExMCAxMCAxMCAyM3ptNzgxLTg2NHY0NDhxMCAyNi0xOSA0NXQtNDUgMTktNDUtMTlsLTE0NC0xNDQtMzMyIDMzMnEtMTAgMTAtMjMgMTB0LTIzLTEwbC0xMTQtMTE0cS0xMC0xMC0xMC0yM3QxMC0yM2wzMzItMzMyLTE0NC0xNDRxLTE5LTE5LTE5LTQ1dDE5LTQ1IDQ1LTE5aDQ0OHEyNiAwIDQ1IDE5dDE5IDQ1eiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==">
+            </div><form class="jsplayer-form" action="javascript:void(0)">
+                <input class="jsplayer-form-input" type="text" name="コメント" value="" autocomplete="off" spellcheck="false" maxlength="60" tabindex="2" disabled><input class="jsplayer-form-button" type="submit" value="コメントする" disabled><input class="jsplayer-form-hidden-id" type="hidden" name="id" value=""><input class="jsplayer-form-hidden-time" type="hidden" name="動画投稿時間" value="">
+            </form>
+        </div>
+    </div>
+
+
+    <span>Player Type: </span>
+    <select id="playerType">
+        <option value="html">HTML</option>
+    </select>
+    <br />
+    <span>Video File</span>
+    <input type="text" id="videoFileUrl" onchange="this.setAttribute('data-mode','text')"/>
+    <input type="file" id="videoFile" accept="video/*,audio/*" onchange="onInputFileChangeVideo()" />
+    <br />
+    <span>Comment File</span>
+    <input type="text" id="commentFileUrl" onchange="this.setAttribute('data-mode','text')"/>
+    <input type="file" id="commentFile" accept="text/xml" onchange="onInputFileChangeComment()" />
+    <br />
+    <input type="submit" id="loadVideo" value="Load" onclick="onClickLoad()" />
+    <br />
+    <details>
+        <summary>Detailed Settings</summary>
+        <span>Comments Loaded: </span>
+        <span id="displayNumComment">N/A</span>
+        <br/>
+        <span>Number of Comments to Load: </span>
+        <span>VideoDuration(sec)×0.83</span>
+        <input type="range" id="numComment" min="-2" max="2" value="0" onchange="onChangeNumberComment()" />
+        <span>×13.33</span>
+        <br />
+        <span>Historical Comments: </span>
+        <span>Oldest</span>
+        <input type="range" id="commentHistory" min="0" max="1" step="0.01" value="1" onchange="onChangeNumberComment()" />
+        <span>Newest</span>
+        <br/>
+        <div id="synchWrapper">
+            <span>Synchronizer: </span>
+            <button onclick="onChangeNumberComment()">Apply</button>
+            <button onclick="onShowTextSynch()">ShowText</button>
+            <input type="file" onchange="$v.synchr.reader.readAsText(this.files[0])"/>
+            <br/>
+            <table id="synchTable" border="1">
+                <tr>
+                    <th>Comment</th>
+                    <th>Video</th>
+                    <th><button onclick="onAddSynch()">New</button></th>
+                </tr>
+            </table>
+            <div id="synchSaver"></div>
+        </div>
+    </details>
+
+
+
+
+
+<script type="text/javascript" src="jsplayer.js"></script>
+
+</body></html>
